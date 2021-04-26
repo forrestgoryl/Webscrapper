@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <title>Signup for your favorite news article conglomeration-search app!</title>
+        <meta description='description' content="Signup for your favorite news article conglomeration-search app!">
+        <meta charset='utf-8'>
+    </head>
+    <body>
+        <h1>Signup</h1>
+        <form action='/process_signup' method='POST'>
+            {% csrf_token %}
+            <input type='text' placeholder='Email' name='email' required>
+            <input type='text' placeholder='First Name' name='first_name' required>
+            <input type='text' placeholder='Password' name='password' required>
+            <input type='text' placeholder='Confirm Password' name='confirm_password' required>
+            <button type='submit'>Signup</button>
+        </form>
+        <a href='/'>or Search Anonymously</a>
+        {% if messages %}
+            <ul class='messages'>
+            {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li> 
+            {% endfor %}
+            </ul>
+        {% endif %}
+    </body>
+</html>

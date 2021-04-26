@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <title>Search the Top News Sources</title>
+        <meta description='description' content="A search engine that searches the top news sites for article links.">
+        <meta charset='utf-8'>
+    </head>
+    <body>
+        <form action='/logout'>
+            <button type='submit'>Logout</button>
+        </form>
+        <h1>Search for articles about a Specific Topic</h1>
+        <input type='text' id='searchbar' name='searchbar'>
+        <button type='button' id='searchbutton'>Search</button>
+        <div id='searchresults'></div>
+        <footer>
+            <div class='pastsearchesContainer'>
+                <h2>Past Searches</h2>
+                <div class='pastsearches'></div>
+            </div>
+            <div class='pastarticlesContainer'>
+                <h2>Past Articles</h2>
+                <div class='pastarticles'></div>
+            </div>
+        </footer>
+    </body>
+    <script>
+        const searchBar = document.getElementById('searchbar');
+        const searchButton = document.getElementById('searchbutton');
+        searchBar.addEventListener('input', e => {
+            let searchString = e.target.value;
+            searchButton.addEventListener('click', function(){
+                const searchResults = document.getElementById('searchresults');
+                if(searchString.length != '') {
+                    searchResults.innerHTML = "Searching for " + searchString;
+                }
+                else{
+                    searchResults.innerHTML = '';
+                }
+            });        
+        });
+    </script>
+</html>
