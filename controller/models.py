@@ -55,11 +55,11 @@ class User(models.Model):
     objects = UserManager()
 
 class Search(models.Model):
-    user = models.OneToOneField(User, related_name='searches', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='searches', on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
 class Article(models.Model):
-    user = models.OneToOneField(User, related_name='articles', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='articles', on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)

@@ -1,6 +1,8 @@
+from django.http.response import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from .models import User
+from django.core import serializers
+from .models import User, Search, Article
 import bcrypt
 
 def render_search(request):
@@ -49,10 +51,43 @@ def process_login(request):
     
 def knownuser_search(request):
     if 'email' in request.session.keys():
+        user = User.objects.get(email=request.session['email'])
+        searches = []
+        if user.searches.exists():
+            for search in user.searches.all():
+                searches += [search.content]
         context = {
-            'user': User.objects.get(email=request.session['email'])
+            'user': user,
+            'searches': searches
         }
         return render(request, 'knownuser_search.html', context)
+
+def knownuser_search_input_already_received(request, received_search):
+    if 'email' in request.session.keys():
+        user = User.objects.get(email=request.session['email'])
+        searches = []
+        if user.searches.exists():
+            for search in user.searches.all():
+                searches += [search.content]
+        context = {
+            'user': user,
+            'searches': searches,
+            'received_search': received_search
+        }
+        print(received_search)
+        return render(request, 'knownuser_search.html', context)
+
+def record_search(request):
+    if request.method == 'POST':
+        print(request.POST)
+        for item in request.POST.lists():
+            print(item)
+        obj = Search.objects.create(
+            user=User.objects.get(email=request.session['email']),
+            content=request.POST['content']
+        )
+        serialized_obj = serializers.serialize('json', [ obj, ])
+        return JsonResponse({'obj': serialized_obj})
     
 def logout(request):
     request.session.flush()

@@ -4,19 +4,24 @@
         <title>Search the Top News Sources</title>
         <meta description='description' content="A search engine that searches the top news sites for article links.">
         <meta charset='utf-8'>
+        <link rel="shortcut icon" href="#">
     </head>
     <body>
         <form action='/logout'>
             <button type='submit'>Logout</button>
         </form>
         <h1>Search for articles about a Specific Topic</h1>
-        <input type='text' id='searchbar' name='searchbar'>
-        <button type='button' id='searchbutton'>Search</button>
+        <input type='text' id='searchbar' name='searchbar' autocomplete='off'>
+        <button type='submit' id='searchbutton'>Search</button>
         <div id='searchresults'></div>
         <footer>
             <div class='pastsearchesContainer'>
                 <h2>Past Searches</h2>
-                <div class='pastsearches'></div>
+                <div id='pastsearches'>
+                    {% for search in searches %}
+                        <a href='/knownuser/search/{{ search }}'>{{ search }}</a>
+                    {% endfor %}
+                </div>
             </div>
             <div class='pastarticlesContainer'>
                 <h2>Past Articles</h2>
@@ -28,16 +33,34 @@
         const searchBar = document.getElementById('searchbar');
         const searchButton = document.getElementById('searchbutton');
         searchBar.addEventListener('input', e => {
-            let searchString = e.target.value;
-            searchButton.addEventListener('click', function(){
-                const searchResults = document.getElementById('searchresults');
-                if(searchString.length != '') {
-                    searchResults.innerHTML = "Searching for " + searchString;
-                }
-                else{
-                    searchResults.innerHTML = '';
-                }
-            });        
+            window.searchString = e.target.value;
+        });
+        searchButton.addEventListener('click', function() {
+            const searchResults = document.getElementById('searchresults');
+            if(searchString.length != '') {
+                searchResults.innerHTML = "Searching for " + searchString;
+                $.post('/record_search/', 
+                {
+                    'content': searchString,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                });
+            }
+            else {
+                searchResults.innerHTML = '';
+            }
         });
     </script>
+    {% if received_search %}
+        <script>
+            let received_search = '{{ received_search }}'
+            const searchResults = document.getElementById('searchresults');
+            searchResults.innerHTML = "Searching for " + received_search;
+            $.post('/record_search/', 
+                {
+                    'content': received_search,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                });
+        </script>
+    {% endif %}
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
 </html>
