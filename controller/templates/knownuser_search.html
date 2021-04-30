@@ -16,25 +16,48 @@
     <body>
         <h5><a  class="float-right" href="/logout">Logout</a><h5>
         <h1 class = "text-center">Looking for specific article??</h1>
-        <div class="container p-4 mb-4 bg-dark text-light"mw-80 mh-100">
+        <div class="container p-5 mb-4 bg-dark text-light" mw-80 mh-100">
             <div class="main">
-                <div class="input-group">
-                    <input type="text" class="form-control rounded w-50 p-3" placeholder="Search" aria-label="Search"
-                    aria-describedby="search-addon" id='searchbar' name='searchbar' />
-                    <button type="button" id='searchbutton' class="btn btn-primary">Search</button>
-                    <div id='searchresults'></div>
-                </div>
+                <form action="/bbc" method="POST">
+                        {%csrf_token%}
+                    <div class="input-group">
+                        <div class="form-outline">
+                            <input type="text" class="form-control" placeholder="Search" id='searchbar' name='searchbar'/>
+                        </div>
+                            <button type="submit" id='searchbutton' class="btn btn-primary">Search</button>
+                            <div id='searchresults'></div>
+                    </div>
+                </form>
             </div>
+            
         </div>
        
         <footer>
             <div class='pastsearchesContainer'>
                 <h2>Past Searches</h2>
                 <div class='pastsearches'></div>
-            </div>
+                <ul>
+                <form action="/deletesearches" method="POST">
+                    {%csrf_token%}
+                    <button type="submit">Delete past searches</button>
+                </form>
+                {%for search in  user.searches.all%}
+                    <li>{{search.keyword}}</li>
+                {% endfor %}
+                </ul>
+                </div>
             <div class='pastarticlesContainer'>
-                <h2>Past Articles</h2>
-                <div class='pastarticles'></div>
+                <h2>Past Articles Saved</h2>
+                <form action="/deletearticles" method="POST">
+                    {%csrf_token%}
+                    <button type="submit">Delete past articles</button>
+                </form>
+                <div class='pastarticles'>
+                    <ul>
+                    {% for article in  user.articles.all%}
+                        <li><a href="{{article.url}}">{{article.name}}</a></li>
+                    {% endfor %}
+                    </ul>
             </div>
         </footer>
     </body>

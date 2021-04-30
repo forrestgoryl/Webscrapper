@@ -55,11 +55,14 @@ class User(models.Model):
     objects = UserManager()
 
 class Search(models.Model):
-    user = models.OneToOneField(User, related_name='searches', on_delete=models.CASCADE)
-    content = models.TextField()
+    user = models.ManyToManyField(User, related_name='searches')
+    keyword = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 class Article(models.Model):
-    user = models.OneToOneField(User, related_name='articles', on_delete=models.CASCADE)
-    content = models.TextField()
+    user = models.ManyToManyField(User, related_name='articles')
+    name = models.TextField()
+    url=models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)

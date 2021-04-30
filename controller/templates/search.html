@@ -17,16 +17,24 @@
         <header>
             <h5><a  class="float-left" href="/signup">SignIn</a><h5>
             <h5><a  class="float-right" href="/logout">Logout</a><h5>
+            <br>
+            <p><h5><a  class="float-left" href="/login">Login</a><h5></p>
+            
         </header>
+            
         <h1 class = "text-center">Looking for specific article??</h1>
         <div class="container p-4 mb-4 bg-dark text-light"mw-80 mh-100">
             <div class="main">
-                <div class="input-group">
-                    <input type="text" class="form-control rounded w-50 p-3" placeholder="Search" aria-label="Search"
-                    aria-describedby="search-addon" id='searchbar' name='searchbar' autocomplete='off' />
-                    <button type="button" id='searchbutton' class="btn btn-primary">Search</button>
-                    <div id='searchresults'></div>
-                </div>
+                <form action="/bbc" method="POST">
+                    {%csrf_token%}
+                    <div class="input-group">
+                            <input type="text" class="form-control rounded w-50 p-3" placeholder="Search" aria-label="Search"
+                            aria-describedby="search-addon" id='searchbar' name='searchbar' autocomplete='off' />
+                            <button type="submit" id='searchbutton' class="btn btn-primary">Search</button>
+                            <div id='searchresults'></div>
+                        
+                    </div>
+                </form>
             </div>
         </div>
     </body>
